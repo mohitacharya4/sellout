@@ -4,8 +4,6 @@ plugins {
     id("com.google.cloud.tools.jib")
 }
 
-val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
 dependencies {
     implementation(project(":libs:observability-starter"))
     implementation(project(":libs:security-starter"))
