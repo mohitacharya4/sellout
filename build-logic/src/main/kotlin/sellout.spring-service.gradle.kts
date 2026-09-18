@@ -65,3 +65,9 @@ jib {
         creationTime = "USE_CURRENT_TIMESTAMP"
     }
 }
+
+// Jib 3.5 reads Task.project at execution time, which the configuration cache forbids.
+// Opting out per task keeps the cache for every build that does not run Jib.
+tasks.matching { it.name.startsWith("jib") }.configureEach {
+    notCompatibleWithConfigurationCache("Jib 3.5 reads Task.project at execution time")
+}
