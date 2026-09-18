@@ -28,7 +28,12 @@ public class SelloutSecurityAutoConfiguration {
 
   @Bean
   public SecurityFilterChain selloutSecurityFilterChain(
-      HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
+      // Injected first so a missing issuer fails as a named property error, not a missing
+      // JwtDecoder.
+      SelloutOidcProperties oidc,
+      HttpSecurity http,
+      JwtAuthenticationConverter jwtAuthenticationConverter)
+      throws Exception {
     return http.csrf(csrf -> csrf.disable())
         .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(

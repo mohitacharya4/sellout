@@ -28,18 +28,10 @@ class BootFailsFastIT {
     // SpringApplication.setDefaultProperties(), which is the lowest-priority source. Without
     // this, boot would fail on the datasource connecting to the wrong port rather than on the
     // missing issuer this test is asserting on.
-    //
-    // spring.security.oauth2.resourceserver.jwt.issuer-uri is also supplied directly (bypassing
-    // the sellout.oidc.issuer -> issuer-uri bridge) with a placeholder value so Boot's own
-    // OAuth2ResourceServerAutoConfiguration still creates a (lazy) JwtDecoder bean; otherwise the
-    // security filter chain bean fails first with an unrelated "No qualifying bean of type
-    // JwtDecoder" error, before SelloutOidcProperties' own validation -- the one this test
-    // targets -- ever gets a chance to run. The decoder is never used to decode a token here.
     assertThatThrownBy(
             () ->
                 app.run(
                         "--sellout.oidc.issuer=",
-                        "--spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost/placeholder-issuer",
                         "--spring.datasource.url=" + SelloutContainers.POSTGRES.getJdbcUrl(),
                         "--spring.datasource.username=" + SelloutContainers.POSTGRES.getUsername(),
                         "--spring.datasource.password=" + SelloutContainers.POSTGRES.getPassword())
