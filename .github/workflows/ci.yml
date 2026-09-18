@@ -35,8 +35,33 @@ jobs:
       - name: Quality gates (compile, lint, unit, property, ArchUnit, coverage)
         run: ./gradlew check
 
+      - name: Restore Testcontainers images
+        id: tc-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/.cache/testcontainers-images
+          key: tc-images-${{ hashFiles('libs/test-fixtures/src/main/java/dev/sellout/testing/containers/SelloutContainers.java') }}
+
+      - name: Load cached Testcontainers images
+        if: steps.tc-cache.outputs.cache-hit == 'true'
+        run: for f in ~/.cache/testcontainers-images/*.tar; do docker load -i "$f"; done
+
       - name: Integration tests (Testcontainers)
         run: ./gradlew integrationTest
+
+      - name: Save Testcontainers images
+        if: steps.tc-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/.cache/testcontainers-images
+          docker save postgres:18-alpine -o ~/.cache/testcontainers-images/postgres.tar
+          docker save quay.io/keycloak/keycloak:26.7 -o ~/.cache/testcontainers-images/keycloak.tar
+
+      - name: Cache Testcontainers images
+        if: steps.tc-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ~/.cache/testcontainers-images
+          key: ${{ steps.tc-cache.outputs.cache-primary-key }}
 
       - name: Build images
         run: ./gradlew jibDockerBuild
