@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: psp-simulator
+
+sellout:
+  oidc:
+    issuer: ${SELLOUT_OIDC_ISSUER:}
+    audience: ${SELLOUT_OIDC_AUDIENCE:sellout-api}

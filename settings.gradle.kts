@@ -22,4 +22,5 @@ include(
     "libs:observability-starter",
     "libs:security-starter",
     "services:inventory-service",
+    "services:psp-simulator",
 )
