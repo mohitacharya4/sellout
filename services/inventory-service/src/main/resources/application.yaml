@@ -5,6 +5,12 @@ spring:
     url: ${SELLOUT_DB_URL:jdbc:postgresql://localhost:5432/sellout}
     username: ${SELLOUT_DB_USER:sellout}
     password: ${SELLOUT_DB_PASSWORD:sellout}
+    hikari:
+      connection-timeout: 3000
+      validation-timeout: 1000
+      data-source-properties:
+        socketTimeout: 5
+        connectTimeout: 3
   jpa:
     open-in-view: false
     hibernate:

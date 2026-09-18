@@ -20,19 +20,7 @@ import org.springframework.web.client.RestClient;
 
 @IntegrationTest
 @ActiveProfiles("demo")
-@TestPropertySource(
-    properties = {
-      "management.tracing.enabled=false",
-      "spring.datasource.hikari.connection-timeout=2000",
-      "spring.datasource.hikari.validation-timeout=1000",
-      // A paused (not stopped) Postgres container freezes its TCP connections instead of
-      // refusing them, so an already-checked-out Hikari connection's query blocks on the socket
-      // read indefinitely. Hikari's own connection-timeout/validation-timeout only bound
-      // acquiring/validating a connection from the pool, not a query running on one already
-      // handed out, so the JDBC socket read needs its own bound for /readyz to flip within the
-      // test's await() window.
-      "spring.datasource.hikari.data-source-properties.socketTimeout=2"
-    })
+@TestPropertySource(properties = "management.tracing.enabled=false")
 class InventoryApplicationIT {
 
   private static final String DEMO_EVENT = "11111111-1111-1111-1111-111111111111";
