@@ -33,8 +33,8 @@ public final class KeycloakGrantedAuthoritiesConverter
   }
 
   private static List<String> realmRoles(Jwt jwt) {
-    Map<String, Object> realmAccess = jwt.getClaimAsMap(REALM_ACCESS);
-    if (realmAccess == null || !(realmAccess.get(ROLES) instanceof List<?> roles)) {
+    if (!(jwt.getClaims().get(REALM_ACCESS) instanceof Map<?, ?> realmAccess)
+        || !(realmAccess.get(ROLES) instanceof List<?> roles)) {
       return List.of();
     }
     return roles.stream().map(String::valueOf).toList();

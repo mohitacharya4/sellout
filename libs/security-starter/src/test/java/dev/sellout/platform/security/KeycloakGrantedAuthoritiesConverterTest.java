@@ -42,6 +42,15 @@ class KeycloakGrantedAuthoritiesConverterTest {
     assertThat(converter.convert(jwt().build())).isEmpty();
   }
 
+  @Test
+  void realmAccessThatIsNotAnObjectYieldsOnlyScopes() {
+    Jwt jwt = jwt().claim("realm_access", "garbage").claim("scope", "openid").build();
+
+    assertThat(converter.convert(jwt))
+        .extracting(GrantedAuthority::getAuthority)
+        .containsExactly("SCOPE_openid");
+  }
+
   private static Jwt.Builder jwt() {
     return Jwt.withTokenValue("token")
         .header("alg", "none")
