@@ -44,3 +44,24 @@ tasks.jacocoTestCoverageVerification {
 tasks.check {
     dependsOn(tasks.jacocoTestCoverageVerification)
 }
+
+jib {
+    from {
+        image = providers.gradleProperty("sellout.baseImage").get()
+    }
+    to {
+        image = "sellout/${project.name}"
+        tags = setOf("local")
+    }
+    container {
+        user = "65532:65532"
+        ports = listOf("8080")
+        environment = mapOf("SERVER_PORT" to "8080")
+        jvmFlags = listOf(
+            "-XX:MaxRAMPercentage=75",
+            "-XX:+ExitOnOutOfMemoryError",
+            "-Djava.security.egd=file:/dev/./urandom",
+        )
+        creationTime = "USE_CURRENT_TIMESTAMP"
+    }
+}
