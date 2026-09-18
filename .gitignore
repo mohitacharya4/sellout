@@ -1,0 +1,48 @@
+# Gradle / Java
+.gradle/
+build/
+out/
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.log
+hs_err_pid*
+
+# Kotlin DSL script cache
+.kotlin/
+
+# Node (demo UI)
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Environment & secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.jks
+*.p12
+
+# Local data / volumes / tool state
+data/
+pgdata/
+.kind/
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Load-test + scan output
+k6-results/
+trivy-results.*
+*.sbom.json
+
+# Editors & OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini

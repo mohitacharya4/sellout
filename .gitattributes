@@ -1,0 +1,14 @@
+* text=auto eol=lf
+
+*.bat text eol=crlf
+gradlew text eol=lf
+
+*.png binary
+*.jpg binary
+*.gif binary
+*.pdf binary
+*.ico binary
+*.jar binary
+
+package-lock.json linguist-generated=true merge=binary
+gradle/wrapper/gradle-wrapper.jar binary
