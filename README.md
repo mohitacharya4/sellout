@@ -84,6 +84,7 @@ Full detail in [`SPEC.md`](SPEC.md).
 | [`ENGINEERING_PRACTICES.md`](ENGINEERING_PRACTICES.md) | Testing, Docker, CI/CD, ops standards |
 | [`specs/`](specs/README.md) | One spec per slice, in build order |
 | [`docs/adr/`](docs/adr/README.md) | Architecture decision records — why each major trade-off went the way it did |
+| [`docs/RUNBOOK.md`](docs/RUNBOOK.md) | Running the local stack, reading health, and procedures added slice by slice |
 
 ## Contributing
 
