@@ -46,3 +46,7 @@ trivy-results.*
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Local tooling scratch (git worktrees, superpowers SDD ledgers)
+.worktrees/
+.superpowers/

@@ -1,0 +1,10 @@
+# gitleaks configuration. Extends the default ruleset.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Demo-only credentials that must be readable in the repo"
+paths = [
+  '''ops/keycloak/realm-sellout\.json''',
+  '''\.env\.example''',
+]
