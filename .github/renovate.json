@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":pinDigests", "group:allNonMajor"],
+  "schedule": ["before 6am on monday"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^gradle\\.properties$/"],
+      "matchStrings": [
+        "sellout\\.baseImage=(?<depName>[^@:\\s]+)@(?<currentDigest>sha256:[a-f0-9]+)"
+      ],
+      "currentValueTemplate": "nonroot",
+      "datasourceTemplate": "docker"
+    }
+  ]
+}

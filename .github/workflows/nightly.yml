@@ -1,0 +1,23 @@
+name: nightly
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mutation:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "PIT mutation testing arrives with spec 001 (domain modules)"
+  load:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "k6 spike arrives with spec 006"
+  chaos:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Toxiproxy chaos arrives with spec 006"
