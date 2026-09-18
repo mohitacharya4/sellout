@@ -1,0 +1,46 @@
+# Platform defaults for every Sellout service. Lowest precedence: application.yaml and env override.
+spring:
+  threads:
+    virtual:
+      enabled: true
+  main:
+    banner-mode: "off"
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+server:
+  port: 8080
+  shutdown: graceful
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-components: always
+      group:
+        liveness:
+          include: livenessState
+          additional-path: server:/healthz
+        readiness:
+          include: "*"
+          exclude: livenessState
+          additional-path: server:/readyz
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        enabled: false
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+logging:
+  structured:
+    format:
+      console: ecs
