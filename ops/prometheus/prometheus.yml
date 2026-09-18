@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 5s
+scrape_configs:
+  - job_name: sellout
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["inventory-service:8080", "psp-simulator:8080"]

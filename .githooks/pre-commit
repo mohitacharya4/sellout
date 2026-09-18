@@ -1,0 +1,4 @@
+#!/bin/sh
+# Mirrors the fast half of `make check`. Install with `make install-hooks`.
+set -e
+./gradlew --quiet spotlessCheck test

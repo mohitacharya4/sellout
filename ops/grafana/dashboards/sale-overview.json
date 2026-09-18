@@ -1,0 +1,18 @@
+{
+  "uid": "sale-overview",
+  "title": "Sale Overview",
+  "tags": ["sellout"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "refresh": "5s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Oversells (must be 0)",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "sum(oversell_total) or vector(0)", "refId": "A" }]
+    }
+  ]
+}
