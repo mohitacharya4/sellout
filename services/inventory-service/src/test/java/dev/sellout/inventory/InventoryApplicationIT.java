@@ -75,7 +75,12 @@ class InventoryApplicationIT {
   @Test
   void aTamperedTokenIs401() {
     String token = tokenFor("alice");
-    String tampered = token.substring(0, token.length() - 1) + (token.endsWith("A") ? "B" : "A");
+    // Tamper a character in the middle of the signature segment, not the last one: for a 256-byte
+    // RS256 signature the last base64url character's low bits are padding, so flipping it changes
+    // no signature byte about 3 times in 4, making the test flaky.
+    int i = token.lastIndexOf('.') + 10;
+    String tampered =
+        token.substring(0, i) + (token.charAt(i) == 'A' ? 'B' : 'A') + token.substring(i + 1);
 
     assertThat(status("/events/" + DEMO_EVENT, tampered)).isEqualTo(401);
   }
