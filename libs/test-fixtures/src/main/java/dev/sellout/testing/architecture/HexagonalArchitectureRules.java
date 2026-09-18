@@ -2,6 +2,7 @@ package dev.sellout.testing.architecture;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
+import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
@@ -44,7 +45,7 @@ public final class HexagonalArchitectureRules {
           .layer("Application")
           .definedBy("..application..")
           // Optional: services adopting this rule set may not have adapter classes yet
-          // (e.g. inventory-service in slice 000), and an empty layer must not fail the rule.
+          // (e.g. psp-simulator in slice 000), and an empty layer must not fail the rule.
           .optionalLayer("Adapters")
           .definedBy("..adapters..")
           .whereLayer("Adapters")
@@ -53,4 +54,8 @@ public final class HexagonalArchitectureRules {
           .mayOnlyBeAccessedByLayers("Adapters")
           .whereLayer("Domain")
           .mayOnlyBeAccessedByLayers("Application", "Adapters");
+
+  @ArchTest
+  public static final ArchRule noPackageCycles =
+      slices().matching("dev.sellout.(*)..").should().beFreeOfCycles();
 }

@@ -62,7 +62,6 @@ jib {
             "-XX:+ExitOnOutOfMemoryError",
             "-Djava.security.egd=file:/dev/./urandom",
         )
-        creationTime = "USE_CURRENT_TIMESTAMP"
     }
 }
 

@@ -10,7 +10,7 @@ import java.time.ZoneOffset;
 public final class MutableClock extends Clock {
 
   private final ZoneId zone;
-  private Instant instant;
+  private volatile Instant instant;
 
   private MutableClock(Instant instant, ZoneId zone) {
     this.instant = instant;
@@ -34,6 +34,10 @@ public final class MutableClock extends Clock {
     return zone;
   }
 
+  /**
+   * Returns an independent snapshot clock in {@code newZone}: advancing or setting the returned
+   * clock does not affect this one, or vice versa.
+   */
   @Override
   public Clock withZone(ZoneId newZone) {
     return new MutableClock(instant, newZone);
