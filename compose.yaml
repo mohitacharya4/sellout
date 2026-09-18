@@ -9,8 +9,19 @@ x-service-env: &service-env
 x-service-defaults: &service-defaults
   restart: unless-stopped
   profiles: ["full"]
+  # Spring's shutdown phase is 20s; Docker's default kill is only 10s.
+  stop_grace_period: 30s
   healthcheck:
-    test: ["CMD", "java", "-cp", "/app/libs/*", "dev.sellout.platform.health.HealthCheck"]
+    test:
+      [
+        "CMD",
+        "java",
+        "-Xmx32m",
+        "-XX:TieredStopAtLevel=1",
+        "-cp",
+        "/app/libs/*",
+        "dev.sellout.platform.health.HealthCheck",
+      ]
     interval: 10s
     timeout: 5s
     retries: 12

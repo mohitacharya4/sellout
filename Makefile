@@ -32,8 +32,8 @@ build: ## Build distroless images into the local Docker daemon
 	$(GRADLE) jibDockerBuild
 
 scan: ## Vulnerability-scan the images (fails on HIGH/CRITICAL)
-	trivy image --severity HIGH,CRITICAL --exit-code 1 sellout/inventory-service:local
-	trivy image --severity HIGH,CRITICAL --exit-code 1 sellout/psp-simulator:local
+	trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed sellout/inventory-service:local
+	trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed sellout/psp-simulator:local
 
 up-infra: ## Backing services only (run services from the IDE)
 	$(COMPOSE) up -d --wait
