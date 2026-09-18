@@ -1,7 +1,12 @@
+import net.ltgt.gradle.errorprone.errorprone
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
     `java-library`
+    jacoco
+    checkstyle
+    id("com.diffplug.spotless")
+    id("net.ltgt.errorprone")
 }
 
 val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -23,6 +28,26 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
+dependencies {
+    errorprone(libs.findLibrary("errorprone-core").get())
+}
+
+spotless {
+    java {
+        target("src/**/*.java")
+        googleJavaFormat(libs.findVersion("google-java-format").get().requiredVersion)
+        removeUnusedImports()
+        formatAnnotations()
+    }
+}
+
+checkstyle {
+    toolVersion = libs.findVersion("checkstyle").get().requiredVersion
+    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+    maxWarnings = 0
+    maxErrors = 0
+}
+
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.compilerArgs.addAll(
@@ -32,6 +57,31 @@ tasks.withType<JavaCompile>().configureEach {
             "-parameters",
         ),
     )
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.errorprone {
+        disableWarningsInGeneratedCode = true
+        excludedPaths = ".*/build/generated/.*"
+    }
+}
+
+// Test classes hold framework-injected fields (e.g. Spring's @MockitoBean) that are never read;
+// Error Prone's UnusedVariable would otherwise flag them as dead code.
+tasks.named<JavaCompile>("compileTestJava") {
+    options.errorprone.disable("UnusedVariable")
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.withType<Test>().configureEach {
@@ -45,7 +95,7 @@ tasks.test {
     useJUnitPlatform { excludeTags("integration") }
 }
 
-val integrationTest by tasks.registering(Test::class) {
+tasks.register<Test>("integrationTest") {
     description = "Runs tests tagged 'integration' (Testcontainers — Docker required)."
     group = "verification"
     testClassesDirs = sourceSets.test.get().output.classesDirs
