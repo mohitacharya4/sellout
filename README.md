@@ -6,7 +6,7 @@
 
 A production-grade Java portfolio project: Java 25 (virtual threads), Spring Boot 4, Gradle Kotlin DSL monorepo, Postgres, Redis, Kafka, Keycloak, OpenTelemetry, Prometheus/Grafana, Docker, Kubernetes (kind + Helm + KEDA), Terraform for AWS, and TDD throughout with Testcontainers.
 
-**Status:** spec stage. The product brief, architecture spec, engineering standards, and the first slice spec are written; no code yet. See [`specs/README.md`](specs/README.md) for the build order.
+**Status:** scaffold complete (spec `000`). Feature slices are next — see [`specs/README.md`](specs/README.md) for the build order.
 
 ---
 
@@ -20,6 +20,41 @@ These go green, with committed results in `docs/results/`, before the project is
 | Seat-hold **p99 < 150 ms** at target RPS on a local kind cluster | k6 thresholds; number published with the hardware spec |
 | Every expired hold released within **TTL + 5 s**; every saga reaches a terminal state | `holds_expired_total`, `saga_stuck == 0` |
 | PSP faults (timeouts, 5xx, duplicate and late webhooks) **never** cause a double charge or a lost seat | Toxiproxy chaos runs + idempotency tests |
+
+## Quickstart
+
+**Prerequisites:** Docker Desktop, any JDK 17–26 to run Gradle (Gradle downloads JDK 25 for compiling), optionally GNU make (`winget install ezwinports.make`).
+
+```bash
+cp .env.example .env      # defaults work for the local stack as-is
+make check                # exactly what CI gates on
+make test-int             # Testcontainers: real Postgres + Keycloak
+make up                   # build images, start the full stack, wait for health
+```
+
+Then:
+
+- **inventory-service** → <http://localhost:8081/healthz>, `/readyz`, `/actuator/prometheus`
+- **Keycloak** → <http://localhost:8180> (admin/admin) — demo users `alice` (CUSTOMER), `oscar` (ORGANIZER), `admin` (ADMIN), password `password`
+- **Grafana** → <http://localhost:3000> (admin/admin) · Prometheus <http://localhost:9090> · Mailpit <http://localhost:8025>
+
+```bash
+TOKEN=$(curl -s -d 'grant_type=password&client_id=sellout-ui&username=alice&password=password' \
+  http://localhost:8180/realms/sellout/protocol/openid-connect/token | sed -E 's/.*"access_token":"([^"]+)".*/\1/')
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8081/events/11111111-1111-1111-1111-111111111111
+```
+
+<details>
+<summary><b>No <code>make</code>?</b> — run the same gates directly</summary>
+
+```bash
+./gradlew check                        # make check
+./gradlew integrationTest              # make test-int
+./gradlew jibDockerBuild               # make build
+docker compose --profile full up -d --wait   # make up
+```
+
+</details>
 
 ## Architecture at a glance
 

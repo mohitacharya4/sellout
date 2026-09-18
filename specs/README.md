@@ -14,7 +14,7 @@ Copy `_TEMPLATE.md` to start a new spec. Number specs in build order. Record any
 
 | # | Spec | Status |
 |---|---|---|
-| 000 | [Project scaffold](000-scaffold.md) — Gradle Kotlin DSL multi-module + convention plugins, `libs/` skeleton, compose infra (Postgres, Redis, Kafka, Keycloak, Mailpit, observability stack), Keycloak realm + resource-server baseline, `/healthz` `/readyz` `/actuator/prometheus`, ArchUnit, CI gates, Jib images, Makefile. **Do this first.** See `../ENGINEERING_PRACTICES.md` | 🔲 not started |
+| 000 | [Project scaffold](000-scaffold.md) — Gradle Kotlin DSL multi-module + convention plugins, `libs/` skeleton, compose infra (Postgres, Redis, Kafka, Keycloak, Mailpit, observability stack), Keycloak realm + resource-server baseline, `/healthz` `/readyz` `/actuator/prometheus`, ArchUnit, CI gates, Jib images, Makefile. **Do this first.** See `../ENGINEERING_PRACTICES.md` | ✅ done |
 | 001 | Inventory — seat model, hold/release/confirm, Redis Lua pre-check + Postgres conditional update, fencing tokens, TTL sweeper, per-user limits, ownership authz; **concurrency + property proofs of no-oversell**; outbox events | 🔲 |
 | 002 | Order saga — PSP simulator with fault injection, saga state machine, inbound/outbound idempotency, webhook HMAC + replay window, deadline sweeper, refund compensation, consumer dedupe, DLQ | 🔲 |
 | 003 | Admission — Redis waiting room, release scheduler tied to inventory capacity, signed admission tokens bound to `(sub, eventId)`, SSE position stream, load shedding; edge-gateway with JWT validation, per-user rate limit, admission-token check | 🔲 |

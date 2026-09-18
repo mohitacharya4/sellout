@@ -1,6 +1,6 @@
 # 000 — Project Scaffold (Gradle, libs, compose, auth baseline, CI, tooling)
 
-**Status:** not started
+**Status:** done
 **Depends on:** none — **this is the very first slice**, before feature `001`.
 
 ## Goal
@@ -38,16 +38,16 @@ Stand up the skeleton so every later slice inherits build conventions, testing i
 - None of SPEC §4.4/§6 are touched. The slice's own invariant: **no unauthenticated request reaches a business endpoint** (proved by the 401 matrix on the placeholder endpoint).
 
 ## Acceptance criteria
-- [ ] `make up` brings the full dev stack healthy (every health check green) with one command; `make up-infra` brings up backing services only.
-- [ ] `make check` runs compile, Spotless, Checkstyle, Error Prone, unit + property + ArchUnit, contract, and the JaCoCo threshold, and is green; the Git hook runs Spotless + unit.
-- [ ] `make test-int` runs the Testcontainers suites green, including the real-Keycloak resource-server test.
-- [ ] `curl /healthz` and `/readyz` pass on `inventory-service`; `/readyz` is red while Flyway is running or Postgres is down; `/actuator/prometheus` exposes JVM and HTTP metrics.
-- [ ] `GET /events/{id}` without a token → `401`; with a `CUSTOMER` token → `200` with the seeded event; with a tampered token → `401`.
-- [ ] ArchUnit fails the build if `domain` imports Spring or JPA, or if `application` imports `adapters`.
-- [ ] Boot with a missing required property **fails fast** with a clear message naming the property.
-- [ ] `make build` produces distroless, non-root images via Jib; Trivy reports no HIGH/CRITICAL; the container passes its `HealthCheck`.
-- [ ] CI runs the PR pipeline green on a trivial change; Gradle and Testcontainers caches hit on re-run.
-- [ ] `README.md` quickstart works from a clean clone on a machine with Docker + JDK 25 (Windows notes for `make` included, as in the Atlas README).
+- [x] `make up` brings the full dev stack healthy (every health check green) with one command; `make up-infra` brings up backing services only.
+- [x] `make check` runs compile, Spotless, Checkstyle, Error Prone, unit + property + ArchUnit, contract, and the JaCoCo threshold, and is green; the Git hook runs Spotless + unit. (contract tests arrive with spec 001)
+- [x] `make test-int` runs the Testcontainers suites green, including the real-Keycloak resource-server test.
+- [x] `curl /healthz` and `/readyz` pass on `inventory-service`; `/readyz` is red while Flyway is running or Postgres is down; `/actuator/prometheus` exposes JVM and HTTP metrics.
+- [x] `GET /events/{id}` without a token → `401`; with a `CUSTOMER` token → `200` with the seeded event; with a tampered token → `401`.
+- [x] ArchUnit fails the build if `domain` imports Spring or JPA, or if `application` imports `adapters`.
+- [x] Boot with a missing required property **fails fast** with a clear message naming the property.
+- [x] `make build` produces distroless, non-root images via Jib; Trivy reports no HIGH/CRITICAL; the container passes its `HealthCheck`.
+- [ ] CI runs the PR pipeline green on a trivial change; Gradle and Testcontainers caches hit on re-run. — verified when the first PR runs
+- [x] `README.md` quickstart works from a clean clone on a machine with Docker + JDK 25 (Windows notes for `make` included, as in the Atlas README).
 
 ## Tests
 - Unit: `@ConfigurationProperties` validation (missing/invalid → error naming the property); `/healthz` and `/readyz` handlers with stub `ReadinessIndicator`s; JSON log layout includes trace fields; `Clock` injection.

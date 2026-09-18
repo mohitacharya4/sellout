@@ -40,6 +40,7 @@ sellout/                          # = the repo root
 ├── PROBLEM.md  SPEC.md           # product + architecture
 ├── specs/                        # feature specs (spec-driven)
 ├── docs/adr/                     # architecture decision records
+├── docs/RUNBOOK.md               # operational procedures
 ├── docs/results/                 # committed load-test results + dashboard screenshots
 ├── Makefile                      # single entrypoint for all dev commands
 ├── settings.gradle.kts           # Gradle multi-module root (Kotlin DSL)
@@ -55,8 +56,9 @@ sellout/                          # = the repo root
 ├── libs/
 │   ├── platform-bom/             # dependency alignment
 │   ├── observability-starter/    # metrics, tracing, JSON logs, health endpoints
-│   ├── outbox-starter/           # outbox table, relay, publisher
-│   ├── idempotency-starter/      # inbound key filter, consumer dedupe
+│   ├── security-starter/         # resource-server baseline, Keycloak role mapping, OIDC config
+│   ├── outbox-starter/           # outbox table, relay, publisher (arrives with spec 001)
+│   ├── idempotency-starter/      # inbound key filter, consumer dedupe (arrives with spec 002)
 │   └── test-fixtures/            # Testcontainers, JWT fixtures, Kafka helpers
 ├── ops/                          # grafana dashboards, prometheus rules, keycloak realm
 ├── deploy/
