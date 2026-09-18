@@ -24,7 +24,8 @@ import org.springframework.web.client.RestClient;
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = {
       "sellout.oidc.issuer=http://localhost:8180/realms/sellout",
-      "sellout.oidc.audience=sellout-api"
+      "sellout.oidc.audience=sellout-api",
+      "management.endpoints.web.exposure.include=health,info,prometheus"
     })
 class ResourceServerTest {
 
@@ -42,6 +43,11 @@ class ResourceServerTest {
   @Test
   void permitsHealthWithoutAToken() {
     assertThat(status("/healthz", null)).isEqualTo(200);
+  }
+
+  @Test
+  void actuatorInfoRequiresAToken() {
+    assertThat(status("/actuator/info", null)).isEqualTo(401);
   }
 
   @Test
