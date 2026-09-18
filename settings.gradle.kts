@@ -20,4 +20,5 @@ include(
     "libs:platform-bom",
     "libs:test-fixtures",
     "libs:observability-starter",
+    "libs:security-starter",
 )
