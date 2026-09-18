@@ -12,6 +12,56 @@
   },
   "clientScopes": [
     {
+      "name": "roles",
+      "protocol": "openid-connect",
+      "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "true" },
+      "protocolMappers": [
+        {
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "name": "basic",
+      "protocol": "openid-connect",
+      "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "false" },
+      "protocolMappers": [
+        {
+          "name": "sub",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-sub-mapper",
+          "consentRequired": false,
+          "config": { "access.token.claim": "true", "introspection.token.claim": "true" }
+        },
+        {
+          "name": "auth_time",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "AUTH_TIME",
+            "claim.name": "auth_time",
+            "jsonType.label": "long",
+            "access.token.claim": "true",
+            "id.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
       "name": "sellout-api",
       "protocol": "openid-connect",
       "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "false" },
@@ -48,7 +98,7 @@
       "redirectUris": ["http://localhost:5173/*", "http://localhost:3000/*"],
       "webOrigins": ["+"],
       "attributes": { "pkce.code.challenge.method": "S256", "post.logout.redirect.uris": "+" },
-      "defaultClientScopes": ["basic", "profile", "email", "roles", "sellout-api"]
+      "defaultClientScopes": ["basic", "roles", "sellout-api"]
     },
     {
       "clientId": "order-service",
