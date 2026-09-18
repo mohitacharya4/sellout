@@ -21,4 +21,5 @@ include(
     "libs:test-fixtures",
     "libs:observability-starter",
     "libs:security-starter",
+    "services:inventory-service",
 )
