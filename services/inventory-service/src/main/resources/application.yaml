@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    url: ${SELLOUT_DB_URL:jdbc:postgresql://localhost:5432/sellout}
+    username: ${SELLOUT_DB_USER:sellout}
+    password: ${SELLOUT_DB_PASSWORD:sellout}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    locations: classpath:db/migration
+
+sellout:
+  oidc:
+    issuer: ${SELLOUT_OIDC_ISSUER:}
+    audience: ${SELLOUT_OIDC_AUDIENCE:sellout-api}
