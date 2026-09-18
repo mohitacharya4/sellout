@@ -1,0 +1,94 @@
+{
+  "realm": "sellout",
+  "enabled": true,
+  "sslRequired": "none",
+  "accessTokenLifespan": 300,
+  "roles": {
+    "realm": [
+      { "name": "CUSTOMER", "description": "Buys tickets; sees only their own holds and orders" },
+      { "name": "ORGANIZER", "description": "Manages their own events" },
+      { "name": "ADMIN", "description": "Operates the platform" }
+    ]
+  },
+  "clientScopes": [
+    {
+      "name": "sellout-api",
+      "protocol": "openid-connect",
+      "attributes": { "include.in.token.scope": "false", "display.on.consent.screen": "false" },
+      "protocolMappers": [
+        {
+          "name": "sellout-api-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "sellout-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    { "name": "inventory:hold", "protocol": "openid-connect", "attributes": { "include.in.token.scope": "true" } },
+    { "name": "inventory:confirm", "protocol": "openid-connect", "attributes": { "include.in.token.scope": "true" } },
+    { "name": "order:write", "protocol": "openid-connect", "attributes": { "include.in.token.scope": "true" } },
+    { "name": "admission:mint", "protocol": "openid-connect", "attributes": { "include.in.token.scope": "true" } }
+  ],
+  "clients": [
+    {
+      "clientId": "sellout-ui",
+      "name": "Sellout demo UI",
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": ["http://localhost:5173/*", "http://localhost:3000/*"],
+      "webOrigins": ["+"],
+      "attributes": { "pkce.code.challenge.method": "S256", "post.logout.redirect.uris": "+" },
+      "defaultClientScopes": ["basic", "profile", "email", "roles", "sellout-api"]
+    },
+    {
+      "clientId": "order-service",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "order-service-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "defaultClientScopes": ["basic", "roles", "sellout-api", "inventory:hold", "inventory:confirm"]
+    },
+    {
+      "clientId": "admission-service",
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "admission-service-secret",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "defaultClientScopes": ["basic", "roles", "sellout-api", "admission:mint"]
+    }
+  ],
+  "users": [
+    {
+      "username": "alice", "enabled": true, "emailVerified": true,
+      "email": "alice@example.com", "firstName": "Alice", "lastName": "Fan",
+      "credentials": [{ "type": "password", "value": "password", "temporary": false }],
+      "realmRoles": ["CUSTOMER"]
+    },
+    {
+      "username": "oscar", "enabled": true, "emailVerified": true,
+      "email": "oscar@example.com", "firstName": "Oscar", "lastName": "Organizer",
+      "credentials": [{ "type": "password", "value": "password", "temporary": false }],
+      "realmRoles": ["ORGANIZER"]
+    },
+    {
+      "username": "admin", "enabled": true, "emailVerified": true,
+      "email": "admin@example.com", "firstName": "Ada", "lastName": "Admin",
+      "credentials": [{ "type": "password", "value": "password", "temporary": false }],
+      "realmRoles": ["ADMIN"]
+    }
+  ]
+}
