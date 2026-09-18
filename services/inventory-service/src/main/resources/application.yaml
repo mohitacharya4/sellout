@@ -3,12 +3,14 @@ spring:
     name: inventory-service
   datasource:
     url: ${SELLOUT_DB_URL:jdbc:postgresql://localhost:5432/sellout}
-    username: ${SELLOUT_DB_USER:sellout}
-    password: ${SELLOUT_DB_PASSWORD:sellout}
+    username: ${SELLOUT_DB_USER}
+    password: ${SELLOUT_DB_PASSWORD}
     hikari:
       connection-timeout: 3000
       validation-timeout: 1000
       data-source-properties:
+        # Also bounds Flyway statements, which reuse this DataSource: long migrations in later
+        # slices will need their own Flyway datasource settings.
         socketTimeout: 5
         connectTimeout: 3
   jpa:

@@ -19,9 +19,12 @@ class MissingIssuerFailsFastTest {
   @Test
   void aMissingOidcIssuerFailsBootNamingTheProperty() {
     SpringApplication app = new SpringApplication(SecurityTestApplication.class);
-    app.setDefaultProperties(Map.of("server.port", "0", "sellout.oidc.audience", "sellout-api"));
+    app.setDefaultProperties(Map.of("sellout.oidc.audience", "sellout-api"));
 
-    Throwable thrown = catchThrowable(() -> app.run("--sellout.oidc.issuer=").close());
+    // server.port=0 must be a command-line arg, not a default property: sellout-defaults.yaml's
+    // server.port: 8080 outranks SpringApplication.setDefaultProperties().
+    Throwable thrown =
+        catchThrowable(() -> app.run("--server.port=0", "--sellout.oidc.issuer=").close());
 
     assertThat(thrown).isNotNull();
     String trace = stackTraceAsString(thrown);

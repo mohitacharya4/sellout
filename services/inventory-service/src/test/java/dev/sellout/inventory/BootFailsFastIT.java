@@ -19,18 +19,22 @@ class BootFailsFastIT {
     app.setWebApplicationType(WebApplicationType.SERVLET);
     app.setDefaultProperties(
         Map.of(
-            "server.port", "0",
             "management.tracing.enabled", "false",
             "sellout.oidc.audience", "sellout-api"));
 
-    // spring.datasource.* must be passed as command-line args, not default properties:
-    // application.yaml's own (non-blank) defaults for these keys take precedence over
+    // spring.datasource.url must be passed as a command-line arg, not a default property:
+    // application.yaml's own non-blank default for this key takes precedence over
     // SpringApplication.setDefaultProperties(), which is the lowest-priority source. Without
     // this, boot would fail on the datasource connecting to the wrong port rather than on the
-    // missing issuer this test is asserting on.
+    // missing issuer this test is asserting on. The username and password no longer have
+    // application.yaml defaults (SELLOUT_DB_USER/SELLOUT_DB_PASSWORD are required), but are
+    // passed the same way for consistency. server.port=0 is likewise passed as a command-line
+    // arg, not a default property, because sellout-defaults.yaml's server.port: 8080 outranks
+    // SpringApplication.setDefaultProperties().
     assertThatThrownBy(
             () ->
                 app.run(
+                        "--server.port=0",
                         "--sellout.oidc.issuer=",
                         "--spring.datasource.url=" + SelloutContainers.POSTGRES.getJdbcUrl(),
                         "--spring.datasource.username=" + SelloutContainers.POSTGRES.getUsername(),

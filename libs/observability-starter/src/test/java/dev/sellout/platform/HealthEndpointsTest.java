@@ -56,12 +56,15 @@ class HealthEndpointsTest {
   }
 
   @Test
-  void prometheusEndpointExposesJvmMetrics() {
+  void prometheusEndpointExposesJvmAndHttpMetrics() {
+    assertThat(status("/healthz")).isEqualTo(200);
+
     ResponseEntity<String> response =
         client.get().uri(url("/actuator/prometheus")).retrieve().toEntity(String.class);
 
     assertThat(response.getStatusCode().value()).isEqualTo(200);
     assertThat(response.getBody()).contains("jvm_memory_used_bytes");
+    assertThat(response.getBody()).contains("http_server_requests");
   }
 
   @Test
