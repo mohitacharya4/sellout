@@ -46,8 +46,8 @@ Stand up the skeleton so every later slice inherits build conventions, testing i
 - [x] ArchUnit fails the build if `domain` imports Spring or JPA, or if `application` imports `adapters`.
 - [x] Boot with a missing required property **fails fast** with a clear message naming the property.
 - [x] `make build` produces distroless, non-root images via Jib; the container passes its `HealthCheck`.
-- [ ] Trivy reports no HIGH/CRITICAL on both images. — verified when the first PR runs (Trivy runs in CI)
-- [ ] CI runs the PR pipeline green on a trivial change; Gradle and Testcontainers caches hit on re-run. — verified when the first PR runs
+- [x] Trivy reports no HIGH/CRITICAL on both images. — verified in CI run 35416033512, after pinning Tomcat 11.0.26 (Boot 4.1.1's managed 11.0.24 carried three CRITICAL CVEs, caught by the first run 35379259518)
+- [x] CI runs the pipeline green; Gradle and Testcontainers caches hit on re-run. — verified on pushes to `main` (run 35416033512 restored the Testcontainers images saved by run 35379259518)
 - [x] `README.md` quickstart works from a clean clone on a machine with Docker + JDK 25 (Windows notes for `make` included, as in the Atlas README).
 
 ## Tests
