@@ -18,5 +18,8 @@ dependencies {
         api(libs.testcontainers.keycloak)
         api(libs.archunit)
         api(libs.jqwik)
+        api(libs.tomcat.embed.core)
+        api(libs.tomcat.embed.el)
+        api(libs.tomcat.embed.websocket)
     }
 }
